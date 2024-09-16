@@ -51,6 +51,9 @@ Modifica el fichero terraform.tfvars para adaptarlo a tus variables:
     reference_registry   = "reference.azurecr.io"
     helm_charts          = ["chart1", "chart2"]
     chart_version        = "1.0.0"
+    num_nodes            = 3
+    vm_size              = "Standard_DS2_v2"
+    name_pool_nodes      = ""
 
 ### Inicializa el proyecto de Terraform:
 
