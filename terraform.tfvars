@@ -1,0 +1,11 @@
+subscription_id      = "c9e7611c-d508-4-f-aede-0bedfabc1560"
+resource_group_name  = "grupo-de-recursos"
+location             = "introducir-region"
+aks_cluster_name     = "cluster-aks-nombre"
+acr_registry_name    = "instancia-acr-nombre"
+reference_registry   = "reference.azurecr.io"
+helm_charts          = ["chart1", "chart2"]
+chart_version        = "1.0.0"
+num_nodes            = 3
+vm_size              = "Standard_DS2_v2"
+name_pool_nodes      = ""
