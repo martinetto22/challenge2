@@ -9,3 +9,5 @@ chart_version        = "1.0.0"
 num_nodes            = 3
 vm_size              = "Standard_DS2_v2"
 name_pool_nodes      = ""
+workspace_name       = ""
+organization_name    = ""

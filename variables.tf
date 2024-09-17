@@ -52,3 +52,13 @@ variable "name_pool_nodes"{
   description = "Nombre pool de nodos"
   type        = string
 }
+
+variable "organization_name"{
+  description = "Nombre de la organización (Terraform Cloud)"
+  type = string
+}
+
+variable "workspace_name"{
+  description = "Nombre del Workspace (Terraform Cloud)"
+  type = string
+}

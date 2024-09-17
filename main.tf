@@ -5,6 +5,13 @@ terraform {
       version = "~> 4.x"
     }
   }
+  backend "remote" {
+    organization = var.organization_name
+
+    workspaces {
+      name = var.workspace_name
+    }
+  }
 }
 
 provider "azurerm" {
