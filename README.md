@@ -1,12 +1,14 @@
-# Proyecto Terraform para AKS y ACR en Azure
+# Challenge 2: Automatización de la Copia de Helm Charts entre Azure Container Registries (ACR)
 
 Este proyecto de Terraform despliega un clúster de Kubernetes (AKS) en Azure y un registro de contenedores privado (ACR). Además, configura los permisos necesarios para que el clúster AKS pueda extraer imágenes del ACR, y copia charts de Helm desde un ACR de referencia a uno de instancia.
 
 ### Requisitos Previos
 Antes de utilizar esta configuración, asegúrate de tener lo siguiente:
-1. Terraform instalado.
-2. Azure CLI instalado y autenticado (az login).
-3. Sistema operativo Linux o compatible con Bash (el script de copia de charts está escrito en Bash).
+1. **Terraform instalado.**
+2. **Azure CLI instalado y autenticado (az login).**
+3. **Cuenta en Terraform Cloud con un workspace creado.**
+4. **Token de API de Terraform Cloud:**
+Ve a [Terraform Cloud](https://app.terraform.io/) y crea un token de API.
 
 ### Estructura del Proyecto
 El proyecto sigue una estructura modular para mantener el código limpio y organizado. Los módulos principales son:
@@ -25,14 +27,19 @@ El proyecto sigue una estructura modular para mantener el código limpio y organ
 ### Variables
 Este proyecto utiliza las siguientes variables:
 
-    subscription_id: ID de la suscripción de Azure.
-    resource_group_name: Nombre del grupo de recursos donde se desplegarán los recursos.
-    location: Región de Azure donde se desplegarán los recursos.
-    aks_cluster_name: Nombre del clúster AKS.
-    acr_registry_name: Nombre del registro ACR de instancia.
-    reference_registry: URL del ACR de referencia desde donde se copiarán los charts de Helm.
-    helm_charts: Lista de charts de Helm a copiar.
-    chart_version: Versión de los charts de Helm a copiar.
+        subscription_id: ID de la suscripción de Azure.
+        resource_group_name: Nombre del grupo de recursos donde se crearán los servicios de Azure.
+        location: Región de Azure donde se desplegará la infraestructura.
+        aks_cluster_name: Nombre del clúster de Kubernetes (AKS) que se va a crear.
+        acr_registry_name: Nombre del Azure Container Registry (ACR) donde se almacenarán las imágenes y charts de Helm.
+        reference_registry: URL del registro ACR de referencia desde el cual se copiarán los charts de Helm.
+        helm_charts: Lista de charts de Helm que se copiarán e instalarán en el clúster de AKS.
+        chart_version: Versión del chart de Helm que se instalará.
+        num_nodes: Número de nodos que tendrá el clúster de AKS.
+        vm_size: Tipo de máquina virtual que se usará para los nodos del clúster de AKS (por ejemplo, "Standard_DS2_v2").
+        name_pool_nodes: Nombre del pool de nodos en el clúster de AKS.
+        workspace_name: Nombre del workspace de Terraform Cloud donde se almacenará el estado.
+        organization_name: Nombre de la organización en Terraform Cloud.
 
 
 ## Uso
@@ -43,17 +50,19 @@ Clona el repositorio y navega al directorio del proyecto.
 
 Modifica el fichero terraform.tfvars para adaptarlo a tus variables:
 
-    subscription_id      = "c9e7611c-d508-4-f-aede-0bedfabc1560"
-    resource_group_name  = "grupo-de-recursos"
-    location             = "introducir-region"
-    aks_cluster_name     = "cluster-aks-nombre"
-    acr_registry_name    = "instancia-acr-nombre"
-    reference_registry   = "reference.azurecr.io"
-    helm_charts          = ["chart1", "chart2"]
-    chart_version        = "1.0.0"
-    num_nodes            = 3
-    vm_size              = "Standard_DS2_v2"
-    name_pool_nodes      = ""
+        subscription_id      = "c9e7611c-d508-4-f-aede-0bedfabc1560"
+        resource_group_name  = "grupo-de-recursos"
+        location             = "introducir-region"
+        aks_cluster_name     = "cluster-aks-nombre"
+        acr_registry_name    = "instancia-acr-nombre"
+        reference_registry   = "reference.azurecr.io"
+        helm_charts          = ["chart1", "chart2"]
+        chart_version        = "1.0.0"
+        num_nodes            = 3
+        vm_size              = "Standard_DS2_v2"
+        name_pool_nodes      = ""
+        workspace_name       = ""
+        organization_name    = ""
 
 ### Inicializa el proyecto de Terraform:
 
@@ -112,7 +121,5 @@ El código no ha sido probado, por lo que podría generar errores.
 - **Escalabilidad**: Ejecutar localmente puede ser ineficiente para proyectos grandes.
   
 ### Mejoras a Considerar
-
-- **Almacenamiento del Estado de Terraform**: Actualmente, no se está gestionando adecuadamente el almacenamiento del estado de Terraform. Esto puede causar problemas de consistencia y control del despliegue, especialmente en equipos colaborativos. Sería conveniente almacenar el estado en una solución remota como **Terraform Cloud** o un backend remoto como **Azure Storage**, para asegurar que el estado esté centralizado, accesible y correctamente versionado.
 
 - **Manejo de Errores y Idempotencia**: El uso de `local-exec` introduce limitaciones en cuanto a la idempotencia y manejo de errores. Sería útil explorar alternativas que permitan a Terraform controlar mejor el estado de las operaciones.
